@@ -8,5 +8,5 @@ namespace Core.DataAccess.EntityFramework
 {
     public class EfEntityRepositoryBase<TEntity,TContext>
     {
-    }//1,00,00 kaldım
+    }
 }
