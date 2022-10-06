@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    //2:09:00'da kaldım
+   
     public class EfProductDal : IProductDal
     {
         public void Add(Product entity)
