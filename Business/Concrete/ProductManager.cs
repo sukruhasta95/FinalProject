@@ -54,7 +54,7 @@ namespace Business.Concrete
 
         public IDataResult<Product> GetById(int productId)
         {
-            return new SuccessDataResult<Product>(_productDal.Get(x=>x.ProductId==productId));    
+            return new SuccessDataResult<Product>(_productDal.Get(x=>x.ProductId==productId),Messages.ProductsListed);    
         }
 
         public IDataResult<List<ProductDetailDto>> GetProductDetails()
