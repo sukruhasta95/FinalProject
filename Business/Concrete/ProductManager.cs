@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Concrete.DTOs;
@@ -17,27 +19,51 @@ namespace Business.Concrete
         {
             _productDal = productDal;
         }
-    
-        public List<Product> GetAll()
+
+        public IResult Add(Product product)
+        {
+            //iş kodları buraya yazılır.
+            // koşullar vs.
+            if (product.ProductName.Length < 2)
+                return new ErrorResult(Messages.ProductNameInvalid);
+
+
+            _productDal.Add(product);
+            return new SuccessResult(Messages.ProductAdded);
+        }
+
+        public IDataResult<List<Product>> GetAll()
         {
             //iş kodları yazılır.
-
-            return _productDal.GetAll();
+            if (DateTime.Now.Hour == 22)
+            {
+                return new ErrorDataResult<List<Product>>(Messages.MaintananceTime);
+            }
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(),Messages.ProductsListed);
         }
 
-        public List<Product> GetAllByCategoryId(int id)
+        public IDataResult<List<Product>> GetAllByCategoryId(int id)
         {
-            return _productDal.GetAll(x=>x.CategoryId==id);
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(x=>x.CategoryId==id));
         }
 
-        public List<Product> GetAllByUnitPrice(decimal min, decimal max)
+        public IDataResult<List<Product>> GetAllByUnitPrice(decimal min, decimal max)
         {
-            return _productDal.GetAll(x=>x.UnitPrice>=min&&x.UnitPrice<=max);
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(x=>x.UnitPrice>=min && x.UnitPrice<=max));
         }
 
-        public List<ProductDetailDto> GetProductDetails()
+        public IDataResult<Product> GetById(int productId)
         {
-            return _productDal.GetProductDetails();
+            return new SuccessDataResult<Product>(_productDal.Get(x=>x.ProductId==productId));    
+        }
+
+        public IDataResult<List<ProductDetailDto>> GetProductDetails()
+        {
+            if (DateTime.Now.Hour == 13)
+            {
+                return new ErrorDataResult<List<ProductDetailDto>>(Messages.MaintananceTime);
+            }
+            return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
         }
     }
 }
